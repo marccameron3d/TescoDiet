@@ -1,0 +1,109 @@
+﻿@using TescoAPIManager
+@{
+    ViewBag.Title = "Home Page";
+    var query = Request.Params["query"];
+    var amount = !string.IsNullOrEmpty(Request.Params["amount"]) ? Request.Params["amount"] : "10";
+
+    TescoGroceryRoot TescoGroc = null;
+    TescoProductRoot TescoProduct = null;
+
+    if (!string.IsNullOrEmpty(query))
+    {
+        TescoGroc = TescoGetQuerys.MakeGroceryRequest(query, 0, amount);
+    }
+}
+
+<style>
+    .col-lg-4 {
+        height: 11em;
+    }
+</style>
+<div class="jumbotron">
+    <h1>Tesco Diets</h1>
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+        <h2>Enter an item to find</h2>
+        <p>
+            This will search the tesco api for items they sell. Will give alternate search terms if the input is spelled incorrectly.
+        </p>
+
+        <div class="row">
+            <div class="col-md-12">
+                <form>
+                    <div class="col-lg-4">
+                        <p>Search Term: </p>
+                        <input name="query" /><br />
+                    </div>
+                    <div class="col-lg-4">
+                        <p>Amount to show (defaults 10) </p>
+                        <input name="amount" /><br />
+                    </div>
+                    <br />
+                    <button class="btn">Search</button>
+                </form>
+            </div>
+        </div>
+        </div>
+            <hr />
+            <div class="col-lg-12">
+                @if (!string.IsNullOrEmpty(query))
+                {
+                    <h2>Searching for items containing : "@query"</h2>
+                }
+            </div>
+            @if (TescoGroc != null)
+            {
+                if (TescoGroc.uk.ghs.products.suggestions.Any())
+                {
+                    <p>Did you mean? : </p>
+                    <ul>
+                        @foreach (var item in TescoGroc.uk.ghs.products.suggestions)
+                        {
+                            <li><a href="/?query=@item.text">@item.text</a></li>
+                        }
+                    </ul>
+                }
+                <hr />
+                foreach (var item in TescoGroc.uk.ghs.products.results)
+                {
+                    if (item != null)
+                    {
+                        TescoProduct = TescoGetQuerys.GetProductInfo("", item.tpnb.ToString(), "");
+                        if (TescoProduct != null)
+                        {
+                            <div class="col-lg-4">
+                                <a href="http://www.tesco.com/groceries/product/details/?id=@TescoProduct.products.FirstOrDefault().tpnc">
+                                    <img src="@item.image" />
+                                    <p>@item.name</p>
+                                </a>
+                            </div>
+                        }
+                        else
+                        {
+                            var productId = item.image.Split('/')[item.image.Split('/').Length - 2];
+                            TescoProduct = TescoGetQuerys.GetProductInfo(productId, "", "");
+                            if (TescoProduct != null)
+                            {
+                                <div class="col-lg-4">
+                                    <a href="http://www.tesco.com/groceries/product/details/?id=@TescoProduct.products.FirstOrDefault().tpnc">
+                                        <img src="@item.image" />
+                                        <p>@item.name</p>
+                                    </a>
+                                </div>
+                            }
+                            else
+                            {
+                                <div class="col-lg-4">
+                                    <p>@item.name is broken : @productId</p>
+                                </div>
+                            }
+                        }
+                    }
+
+                }
+
+            }
+        
+</div>

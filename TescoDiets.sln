@@ -1,0 +1,33 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2013
+VisualStudioVersion = 12.0.40629.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{1B8668C2-6D5B-4557-B905-D6620015F514}"
+	ProjectSection(SolutionItems) = preProject
+		.nuget\packages.config = .nuget\packages.config
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TescoAPIManager", "TescoAPIManager\TescoAPIManager.csproj", "{0F6FFFCB-4AA3-45A6-BC6B-92BB9E5B9990}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TescoDiets", "TescoDiets\TescoDiets.csproj", "{DC07E091-3082-41DF-AF05-F416C2FD01E9}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{0F6FFFCB-4AA3-45A6-BC6B-92BB9E5B9990}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0F6FFFCB-4AA3-45A6-BC6B-92BB9E5B9990}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0F6FFFCB-4AA3-45A6-BC6B-92BB9E5B9990}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0F6FFFCB-4AA3-45A6-BC6B-92BB9E5B9990}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DC07E091-3082-41DF-AF05-F416C2FD01E9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DC07E091-3082-41DF-AF05-F416C2FD01E9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DC07E091-3082-41DF-AF05-F416C2FD01E9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DC07E091-3082-41DF-AF05-F416C2FD01E9}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
