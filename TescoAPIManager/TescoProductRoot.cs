@@ -131,7 +131,7 @@ namespace TescoAPIManager
         public List<Category> category { get; set; }
     }
 
-    public class Product
+    public class ProductDetail
     {
         public string gtin { get; set; }
         public string tpnb { get; set; }
@@ -150,6 +150,6 @@ namespace TescoAPIManager
 
     public class TescoProductRoot
     {
-        public List<Product> products { get; set; }
+        public List<ProductDetail> products { get; set; }
     }
 }

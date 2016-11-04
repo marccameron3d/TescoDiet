@@ -1,15 +1,16 @@
 ﻿@using TescoAPIManager
+@using TescoCustomLibrary
 @{
     ViewBag.Title = "Home Page";
     var query = Request.Params["query"];
     var amount = !string.IsNullOrEmpty(Request.Params["amount"]) ? Request.Params["amount"] : "10";
 
-    TescoGroceryRoot TescoGroc = null;
-    TescoProductRoot TescoProduct = null;
+    CustomTescoProducts cTProducts = null;
 
     if (!string.IsNullOrEmpty(query))
     {
-        TescoGroc = TescoGetQuerys.MakeGroceryRequest(query, 0, amount);
+        cTProducts = new CustomTescoProducts(query);
+       
     }
 }
 
@@ -63,95 +64,56 @@
             <h2>Searching for items containing : "@query"</h2>
         }
     </div>
-    @if (TescoGroc != null)
+    @if (cTProducts != null)
     {
         //tesco suggestions for misspelled items in the query
-        if (TescoGroc.uk.ghs.products.suggestions.Any())
+        if (cTProducts.SuggestedTerms != null && cTProducts.SuggestedTerms.Any())
         {
             <p>Did you mean? : </p>
             <ul>
-                @foreach (var item in TescoGroc.uk.ghs.products.suggestions)
+                @*output suggestions by score*@
+
+                @foreach (var item in cTProducts.SuggestedTerms)
                 {
-                    <li><a href="/?query=@item.text">@item.text</a></li>
+                    if (item != null)
+                    {
+                        <li><a href="/?query=@item.text">@item.text</a></li>
+                    }
                 }
+
             </ul>
         }
         <hr />
 
-        List<List<Category>> productCategories = new List<List<Category>>();
-        //sort the query results as per the filters.
-        foreach (var item in TescoGroc.uk.ghs.products.results)
-        {
-            TescoProduct = TescoGetQuerys.GetProductInfo("", item.tpnb.ToString(), "");
-            if (TescoProduct != null)
-            {
-                if (TescoProduct.products.FirstOrDefault().productAttributes != null)
-                {
-                    productCategories.Add(TescoProduct.products.FirstOrDefault().productAttributes.FirstOrDefault().category);
-                }
-                else
-                {
-                    productCategories.Add(new List<Category>());
-                }
-            }
-        }
+        //todo:get product lifestyle
+
         //-------------------
         //Variables to help build the output into a 3x3 grid
         var count = 0;
         var rowCount = 0;
         //----------------
         //searching through the collection and outputing items
-        foreach (var item in TescoGroc.uk.ghs.products.results)
+        foreach (var product in cTProducts.TescoProducts)
         {
             if (rowCount == 0)
             {
                 @:<div class="row">
-            }
-            if (item != null)
+                }
+            if (product != null)
             {
                 <div class="col-lg-4">
-                    @*Get items*@
-                    @{ TescoProduct = TescoGetQuerys.GetProductInfo("", item.tpnb.ToString(), ""); }
-                    @if (TescoProduct != null)
+                    <a href="http://www.tesco.com/groceries/product/details/?id=@product.Tpnc">
+                        <img src="@product.Img" />
+                        <p>@product.Name</p>
+                    </a>
+                    @foreach (var lifeStyle in product.Lifestyles)
                     {
-                        <a href="http://www.tesco.com/groceries/product/details/?id=@TescoProduct.products.FirstOrDefault().tpnc">
-                            <img src="@item.image" />
-                            <p>@item.name</p>
-                        </a>
+                        <p>@lifeStyle.lifestyle.value</p>
                     }
-                    else
-                    {
-                        @*Get item with id if fails with tnpb*@
-                        var productId = item.image.Split('/')[item.image.Split('/').Length - 2];
-                        TescoProduct = TescoGetQuerys.GetProductInfo(productId, "", "");
-                        if (TescoProduct != null)
-                        {
-                            <a href="http://www.tesco.com/groceries/product/details/?id=@TescoProduct.products.FirstOrDefault().tpnc">
-                                <img src="@item.image" />
-                                <p>@item.name</p>
-                            </a>
-                        }
-                        else
-                        {
-                            @*output if item fails completely*@
-                            <p>@item.name is broken : @productId</p>
-                        }
-                    }
-                    
-                    @*Output if lyestyle exists*@
-                    <div class="foodCategoruy">
-                        @if (productCategories[count].FirstOrDefault() != null && productCategories[count].FirstOrDefault().lifestyle != null)
-                        {
-                            foreach (var lifestyle in productCategories[count].FirstOrDefault().lifestyle)
-                            {
-                                <p>
-                                    @lifestyle.lifestyle.value
-                                </p>
-                            }
-                        }
-                    </div>
                 </div>
             }
+            //---
+            //counter
             rowCount++;
             count++;
             if (rowCount == 3)
@@ -159,10 +121,8 @@
                 @:</div>
                 rowCount = 0;
             }
-
-
+            //-----
         }
-
     }
     @* ------------------------------------------------------------------------------------------ *@
 </div>

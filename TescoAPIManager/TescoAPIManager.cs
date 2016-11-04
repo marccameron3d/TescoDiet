@@ -33,31 +33,60 @@ namespace TescoAPIManager
         }
 
         /// <summary>
-        /// Add only 1 paramter at a time
+        /// Product info from GTIN
         /// </summary>
         /// <param name="gtin"></param>
-        /// <param name="tpnb"></param>
-        /// <param name="tpnc"></param>
         /// <returns></returns>
-        public static TescoProductRoot GetProductInfo (string gtin = "", string tpnb = "", string tpnc = "")
+        public static TescoProductRoot GetProductInfoGtin (string gtin = "")
         {
             HttpClient client = new HttpClient();
+            var uri = "https://dev.tescolabs.com/product/?gtin=" + gtin;
+            client.BaseAddress = new Uri(uri);
+            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+            // Request headers
+            client.DefaultRequestHeaders.Add("Ocp-Apim-Subscription-Key", APIKey);
 
-            var uri = "https://dev.tescolabs.com/product/?";
+            HttpResponseMessage response = client.GetAsync(uri).Result;
 
-            if (!string.IsNullOrEmpty(gtin))
+            if (response.IsSuccessStatusCode)
             {
-                uri += "gtin="+gtin;
-            }
-            if (!string.IsNullOrEmpty(tpnb))
-            {
-                uri += "tpnb="+tpnb;
-            }
-            if (!string.IsNullOrEmpty(tpnc))
-            {
-                uri += "tpnc="+tpnc;
+                return JsonConvert.DeserializeObject<TescoProductRoot>(response.Content.ReadAsStringAsync().Result);
             }
 
+            return new TescoProductRoot();
+        }
+        /// <summary>
+        /// Product info from tbnc
+        /// </summary>
+        /// <param name="tpnc"></param>
+        /// <returns></returns>
+        public static TescoProductRoot GetProductInfoTpnc(string tpnc = "")
+        {
+            HttpClient client = new HttpClient();
+            var uri = "https://dev.tescolabs.com/product/?tpnc=" + tpnc;
+            client.BaseAddress = new Uri(uri);
+            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+            // Request headers
+            client.DefaultRequestHeaders.Add("Ocp-Apim-Subscription-Key", APIKey);
+
+            HttpResponseMessage response = client.GetAsync(uri).Result;
+
+            if (response.IsSuccessStatusCode)
+            {
+                return JsonConvert.DeserializeObject<TescoProductRoot>(response.Content.ReadAsStringAsync().Result);
+            }
+
+            return new TescoProductRoot();
+        }
+        /// <summary>
+        /// Product info from tpnb
+        /// </summary>
+        /// <param name="tpnb"></param>
+        /// <returns></returns>
+        public static TescoProductRoot GetProductInfoTpnb(string tpnb = "")
+        {
+            HttpClient client = new HttpClient();
+            var uri = "https://dev.tescolabs.com/product/?tpnb=" + tpnb;
             client.BaseAddress = new Uri(uri);
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
             // Request headers
