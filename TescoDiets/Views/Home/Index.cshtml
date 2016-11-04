@@ -17,11 +17,7 @@
     }
 }
 
-<style>
-    .col-lg-4 {
-        height: auto;
-    }
-</style>
+
 
 <div class="jumbotron">
     <h1>Tesco Diets</h1>
@@ -104,37 +100,39 @@
             {
                 <div class="col-lg-4">
                     <a href="http://www.tesco.com/groceries/product/details/?id=@product.Tpnc">
-                        <img src="@product.Img"/>
+                        <img src="@product.Img" />
                         <p>@product.Name</p>
                     </a>
+                    @if (product.Description != null)
+                    {
+                        <p href="#" class="showHide btn btn-info">Description</p>
+                        <div>
 
-                    <p href="#" class="showHide btn btn-info">Description</p>
-                    <div>
-                        @if (product.Description != null)
-                        {
-                            foreach (var description in product.Description)
+                            @foreach (var description in product.Description)
                             {
                                 if (!string.IsNullOrWhiteSpace(description))
                                 {
                                     <p>@description</p>
                                 }
                             }
-                        }
-                    </div>
 
-                    <p class="showHide btn btn-info">Lifestyle Info</p>
-                    <div>
-                        @if (product.Lifestyles != null)
-                        {
-                            foreach (var lifeStyle in product.Lifestyles)
+                        </div>
+                    }
+                    @if (product.Lifestyles != null)
+                    {
+                        <p class="showHide btn btn-info">Lifestyle Info</p>
+                        <div>
+
+                            @foreach (var lifeStyle in product.Lifestyles)
                             {
                                 if (lifeStyle.lifestyle != null)
                                 {
                                     <p>@lifeStyle.lifestyle.value</p>
                                 }
                             }
-                        }
-                    </div>
+
+                        </div>
+                    }
                 </div>
             }
 
@@ -144,12 +142,13 @@
             count++;
             if (rowCount == 3)
             {
-                @:</div>
+                @:
+            </div>
                 rowCount = 0;
             }
         }
         //-----
-        }
-    
+    }
+
     @* ------------------------------------------------------------------------------------------ *@
 </div>
