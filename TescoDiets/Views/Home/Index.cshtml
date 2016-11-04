@@ -110,10 +110,12 @@
 
                             @foreach (var description in product.Description)
                             {
-                                if (!string.IsNullOrWhiteSpace(description))
-                                {
-                                    <p>@description</p>
-                                }
+                                <ul class="list-group">
+                                    @if (!string.IsNullOrWhiteSpace(description))
+                                    {
+                                        <li class="list-group-item">@description</li>
+                                    }
+                                </ul>
                             }
 
                         </div>
@@ -125,10 +127,12 @@
 
                             @foreach (var lifeStyle in product.Lifestyles)
                             {
-                                if (lifeStyle.lifestyle != null)
-                                {
-                                    <p>@lifeStyle.lifestyle.value</p>
-                                }
+                                <ul class="list-group">
+                                    @if (lifeStyle.lifestyle != null)
+                                    {
+                                    <li class="list-group-item">@lifeStyle.lifestyle.value</li>
+                                    }
+                                </ul>
                             }
 
                         </div>
@@ -142,8 +146,7 @@
             count++;
             if (rowCount == 3)
             {
-                @:
-            </div>
+                @:</div>
                 rowCount = 0;
             }
         }
