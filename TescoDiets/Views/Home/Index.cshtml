@@ -85,10 +85,18 @@
             TescoProduct = TescoGetQuerys.GetProductInfo("", item.tpnb.ToString(), "");
             if (TescoProduct != null)
             {
-                productCategories.Add(TescoProduct.products.FirstOrDefault().productAttributes.FirstOrDefault().category);
+                if (TescoProduct.products.FirstOrDefault().productAttributes != null)
+                {
+                    productCategories.Add(TescoProduct.products.FirstOrDefault().productAttributes.FirstOrDefault().category);
+                }
+                else
+                {
+                    productCategories.Add(new List<Category>());
+                }
             }
         }
         //-------------------
+        //Variables to help build the output into a 3x3 grid
         var count = 0;
         var rowCount = 0;
         //----------------
@@ -132,7 +140,7 @@
                     
                     @*Output if lyestyle exists*@
                     <div class="foodCategoruy">
-                        @if (productCategories[count].FirstOrDefault().lifestyle != null)
+                        @if (productCategories[count].FirstOrDefault() != null && productCategories[count].FirstOrDefault().lifestyle != null)
                         {
                             foreach (var lifestyle in productCategories[count].FirstOrDefault().lifestyle)
                             {
