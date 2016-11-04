@@ -66,6 +66,9 @@
   <ItemGroup>
     <Compile Include="TescoAPIManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TescoProductRoot.cs" />
+    <Compile Include="TescoGroceryRoot.cs" />
+    <Compile Include="TescoProductOfType.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
