@@ -22,3 +22,13 @@ select,
 textarea {
     max-width: 280px;
 }
+
+.showHide + div {
+    display: none;
+}
+.col-lg-4 {
+        height: auto;
+    }
+.row {
+    margin-bottom: 20px;
+}

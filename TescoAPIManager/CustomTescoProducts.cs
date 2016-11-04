@@ -41,7 +41,13 @@ namespace TescoCustomLibrary
             {
                 foreach (var productsResult in GroceryJson.uk.ghs.products.results)
                 {
-                    TescoProduct tescoProduct = new TescoProduct(productsResult.name, productsResult.image, GetProductLifeStyles(productsResult.tpnb.ToString(), ProductSearch.Tpnb), productsResult.tpnb, GetGTIN(productsResult.image), GetTPNC(productsResult.tpnb.ToString()));
+                    TescoProduct tescoProduct = new TescoProduct(productsResult.name,
+                                                                 productsResult.image,
+                                                                 productsResult.description,
+                                                                 GetProductLifeStyles(productsResult.tpnb.ToString(),ProductSearch.Tpnb),
+                                                                 productsResult.tpnb,
+                                                                 GetGTIN(productsResult.image),
+                                                                 GetTPNC(productsResult.tpnb.ToString()));
                     TescoProducts.Add(tescoProduct);
                 }
             }
@@ -50,11 +56,12 @@ namespace TescoCustomLibrary
         private List<Lifestyle> GetProductLifeStyles(string id, ProductSearch productSearch)
         {
             var productInfo = GetProductDetailJson(id, productSearch);
+
             if (productInfo.products != null)
             {
                 if (productInfo.products.FirstOrDefault().productAttributes != null)
                 {
-                    if (productInfo.products.FirstOrDefault().productAttributes.FirstOrDefault().category != null)
+                    if (productInfo.products.FirstOrDefault().productAttributes.FirstOrDefault() != null)
                     {
                         if (
                             productInfo.products.FirstOrDefault()
@@ -169,12 +176,14 @@ namespace TescoCustomLibrary
         public string Tpnc { get; set; }
         public int Tpnb { get; set; }
         public string Gtin { get; set; }
+        public List<string> Description { get; set; }
 
-        public TescoProduct(string name, string image, List<Lifestyle> lifestyles = null, int tpnb = 0, string gtin = "", string tpnc = "")
+        public TescoProduct(string name, string image, List<string> description = null, List<Lifestyle> lifestyles = null, int tpnb = 0, string gtin = "", string tpnc = "")
         {
             Name = name;
             Img = image;
             Lifestyles = lifestyles;
+            Description = description;
             Tpnc = tpnc;
             Tpnb = tpnb;
             Gtin = gtin;

@@ -1,25 +1,24 @@
-﻿$(document).ready(function () {
-
+﻿$(document).ready(function() {
+    
     //set all as default checked on the form if nothing else is picked
-    if (getParameterByName("vegan") == null &&
-        getParameterByName("kosher") == null &&
-        getParameterByName("vegetarian") == null) {
-        $('.foodFilter').prop('checked', true);
-    }
-
     if (getParameterByName("foodFilter") != null) {
-       $('.foodFilter').prop('checked', true);
-    }
-    if (getParameterByName("vegan") != null) {
-        $('.vegan').prop('checked', true);
-    }
-    if (getParameterByName("kosher") != null) {
-        $('.kosher').prop('checked', true);
-    }
-    if (getParameterByName("vegetarian") != null) {
-        $('.vegetarian').prop('checked', true);
+        if (getParameterByName("foodFilter").lastIndexOf("all") > -1) {
+            $('.foodFilter').prop('checked', true);
+        }
+        if (getParameterByName("foodFilter").lastIndexOf("vegan") > -1) {
+            $('.vegan').prop('checked', true);
+        }
+        if (getParameterByName("foodFilter").lastIndexOf("kosher") > -1) {
+            $('.kosher').prop('checked', true);
+        }
+        if (getParameterByName("foodFilter").lastIndexOf("vegetarian") > -1) {
+            $('.vegetarian').prop('checked', true);
+        }
     }
 
+    $('.showHide').click(function () {
+        $(this).next().slideToggle();
+    });
 
 });
 

@@ -3,14 +3,17 @@
 @{
     ViewBag.Title = "Home Page";
     var query = Request.Params["query"];
+
+    //Filters for food types
+    var foodFilter = Request.Params["foodFilter"] != null ? Request.Params["foodFilter"].ToString() : null;
+    @foodFilter
     var amount = !string.IsNullOrEmpty(Request.Params["amount"]) ? Request.Params["amount"] : "10";
 
     CustomTescoProducts cTProducts = null;
 
     if (!string.IsNullOrEmpty(query))
     {
-        cTProducts = new CustomTescoProducts(query);
-       
+        cTProducts = new CustomTescoProducts(query, 0, amount);
     }
 }
 
@@ -44,10 +47,10 @@
                         <input name="amount" /><br />
                     </div>
                     <div class="col-lg-4">
-                        <input type="checkbox" class="foodFilter" name="foodFilter" value="All">All<br>
-                        <input type="checkbox" class="kosher" name="kosher" value="true">Kosher<br>
-                        <input type="checkbox" class="vegetarian" name="vegetarian" value="true">Vegetarian<br>
-                        <input type="checkbox" class="vegan" name="vegan" value="true">Vegan<br>
+                        <input type="checkbox" class="foodFilter" name="foodFilter[]" value="All">All<br>
+                        <input type="checkbox" class="kosher" name="foodFilter[]" value="kosher">Kosher<br>
+                        <input type="checkbox" class="vegan" name="foodFilter[]" value="vegetarian">Vegetarian<br>
+                        <input type="checkbox" class="vegan" name="foodFilter[]" value="vegan">Vegan<br>
                     </div>
                     <br />
                     <button class="btn">Search</button>
@@ -71,8 +74,6 @@
         {
             <p>Did you mean? : </p>
             <ul>
-                @*output suggestions by score*@
-
                 @foreach (var item in cTProducts.SuggestedTerms)
                 {
                     if (item != null)
@@ -98,20 +99,45 @@
             if (rowCount == 0)
             {
                 @:<div class="row">
-                }
+            }
             if (product != null)
             {
                 <div class="col-lg-4">
                     <a href="http://www.tesco.com/groceries/product/details/?id=@product.Tpnc">
-                        <img src="@product.Img" />
+                        <img src="@product.Img"/>
                         <p>@product.Name</p>
                     </a>
-                    @foreach (var lifeStyle in product.Lifestyles)
-                    {
-                        <p>@lifeStyle.lifestyle.value</p>
-                    }
+
+                    <p href="#" class="showHide btn btn-info">Description</p>
+                    <div>
+                        @if (product.Description != null)
+                        {
+                            foreach (var description in product.Description)
+                            {
+                                if (!string.IsNullOrWhiteSpace(description))
+                                {
+                                    <p>@description</p>
+                                }
+                            }
+                        }
+                    </div>
+
+                    <p class="showHide btn btn-info">Lifestyle Info</p>
+                    <div>
+                        @if (product.Lifestyles != null)
+                        {
+                            foreach (var lifeStyle in product.Lifestyles)
+                            {
+                                if (lifeStyle.lifestyle != null)
+                                {
+                                    <p>@lifeStyle.lifestyle.value</p>
+                                }
+                            }
+                        }
+                    </div>
                 </div>
             }
+
             //---
             //counter
             rowCount++;
@@ -121,8 +147,9 @@
                 @:</div>
                 rowCount = 0;
             }
-            //-----
         }
-    }
+        //-----
+        }
+    
     @* ------------------------------------------------------------------------------------------ *@
 </div>
