@@ -90,10 +90,15 @@
         }
         //-------------------
         var count = 0;
+        var rowCount = 0;
         //----------------
         //searching through the collection and outputing items
         foreach (var item in TescoGroc.uk.ghs.products.results)
         {
+            if (rowCount == 0)
+            {
+                @:<div class="row">
+            }
             if (item != null)
             {
                 <div class="col-lg-4">
@@ -132,14 +137,22 @@
                             foreach (var lifestyle in productCategories[count].FirstOrDefault().lifestyle)
                             {
                                 <p>
-                                @lifestyle.lifestyle.value
+                                    @lifestyle.lifestyle.value
                                 </p>
                             }
                         }
                     </div>
                 </div>
             }
+            rowCount++;
             count++;
+            if (rowCount == 3)
+            {
+                @:</div>
+                rowCount = 0;
+            }
+
+
         }
 
     }
