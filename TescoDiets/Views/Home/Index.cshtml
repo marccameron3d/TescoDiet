@@ -15,9 +15,10 @@
 
 <style>
     .col-lg-4 {
-        height: 11em;
+        height: auto;
     }
 </style>
+
 <div class="jumbotron">
     <h1>Tesco Diets</h1>
 </div>
@@ -29,6 +30,7 @@
             This will search the tesco api for items they sell. Will give alternate search terms if the input is spelled incorrectly.
         </p>
 
+        @*Form*@
         <div class="row">
             <div class="col-md-12">
                 <form>
@@ -40,70 +42,106 @@
                         <p>Amount to show (defaults 10) </p>
                         <input name="amount" /><br />
                     </div>
+                    <div class="col-lg-4">
+                        <input type="checkbox" class="foodFilter" name="foodFilter" value="All">All<br>
+                        <input type="checkbox" class="kosher" name="kosher" value="true">Kosher<br>
+                        <input type="checkbox" class="vegetarian" name="vegetarian" value="true">Vegetarian<br>
+                        <input type="checkbox" class="vegan" name="vegan" value="true">Vegan<br>
+                    </div>
                     <br />
                     <button class="btn">Search</button>
                 </form>
             </div>
         </div>
-        </div>
-            <hr />
-            <div class="col-lg-12">
-                @if (!string.IsNullOrEmpty(query))
+        @* --------------------------------------------------------------------------- *@
+        @*Search Output*@
+    </div>
+    <hr />
+    <div class="col-lg-12">
+        @if (!string.IsNullOrEmpty(query))
+        {
+            <h2>Searching for items containing : "@query"</h2>
+        }
+    </div>
+    @if (TescoGroc != null)
+    {
+        //tesco suggestions for misspelled items in the query
+        if (TescoGroc.uk.ghs.products.suggestions.Any())
+        {
+            <p>Did you mean? : </p>
+            <ul>
+                @foreach (var item in TescoGroc.uk.ghs.products.suggestions)
                 {
-                    <h2>Searching for items containing : "@query"</h2>
+                    <li><a href="/?query=@item.text">@item.text</a></li>
                 }
-            </div>
-            @if (TescoGroc != null)
+            </ul>
+        }
+        <hr />
+
+        List<List<Category>> productCategories = new List<List<Category>>();
+        //sort the query results as per the filters.
+        foreach (var item in TescoGroc.uk.ghs.products.results)
+        {
+            TescoProduct = TescoGetQuerys.GetProductInfo("", item.tpnb.ToString(), "");
+            if (TescoProduct != null)
             {
-                if (TescoGroc.uk.ghs.products.suggestions.Any())
-                {
-                    <p>Did you mean? : </p>
-                    <ul>
-                        @foreach (var item in TescoGroc.uk.ghs.products.suggestions)
-                        {
-                            <li><a href="/?query=@item.text">@item.text</a></li>
-                        }
-                    </ul>
-                }
-                <hr />
-                foreach (var item in TescoGroc.uk.ghs.products.results)
-                {
-                    if (item != null)
+                productCategories.Add(TescoProduct.products.FirstOrDefault().productAttributes.FirstOrDefault().category);
+            }
+        }
+        //-------------------
+        var count = 0;
+        //----------------
+        //searching through the collection and outputing items
+        foreach (var item in TescoGroc.uk.ghs.products.results)
+        {
+            if (item != null)
+            {
+                <div class="col-lg-4">
+                    @*Get items*@
+                    @{ TescoProduct = TescoGetQuerys.GetProductInfo("", item.tpnb.ToString(), ""); }
+                    @if (TescoProduct != null)
                     {
-                        TescoProduct = TescoGetQuerys.GetProductInfo("", item.tpnb.ToString(), "");
+                        <a href="http://www.tesco.com/groceries/product/details/?id=@TescoProduct.products.FirstOrDefault().tpnc">
+                            <img src="@item.image" />
+                            <p>@item.name</p>
+                        </a>
+                    }
+                    else
+                    {
+                        @*Get item with id if fails with tnpb*@
+                        var productId = item.image.Split('/')[item.image.Split('/').Length - 2];
+                        TescoProduct = TescoGetQuerys.GetProductInfo(productId, "", "");
                         if (TescoProduct != null)
                         {
-                            <div class="col-lg-4">
-                                <a href="http://www.tesco.com/groceries/product/details/?id=@TescoProduct.products.FirstOrDefault().tpnc">
-                                    <img src="@item.image" />
-                                    <p>@item.name</p>
-                                </a>
-                            </div>
+                            <a href="http://www.tesco.com/groceries/product/details/?id=@TescoProduct.products.FirstOrDefault().tpnc">
+                                <img src="@item.image" />
+                                <p>@item.name</p>
+                            </a>
                         }
                         else
                         {
-                            var productId = item.image.Split('/')[item.image.Split('/').Length - 2];
-                            TescoProduct = TescoGetQuerys.GetProductInfo(productId, "", "");
-                            if (TescoProduct != null)
-                            {
-                                <div class="col-lg-4">
-                                    <a href="http://www.tesco.com/groceries/product/details/?id=@TescoProduct.products.FirstOrDefault().tpnc">
-                                        <img src="@item.image" />
-                                        <p>@item.name</p>
-                                    </a>
-                                </div>
-                            }
-                            else
-                            {
-                                <div class="col-lg-4">
-                                    <p>@item.name is broken : @productId</p>
-                                </div>
-                            }
+                            @*output if item fails completely*@
+                            <p>@item.name is broken : @productId</p>
                         }
                     }
-
-                }
-
+                    
+                    @*Output if lyestyle exists*@
+                    <div class="foodCategoruy">
+                        @if (productCategories[count].FirstOrDefault().lifestyle != null)
+                        {
+                            foreach (var lifestyle in productCategories[count].FirstOrDefault().lifestyle)
+                            {
+                                <p>
+                                @lifestyle.lifestyle.value
+                                </p>
+                            }
+                        }
+                    </div>
+                </div>
             }
-        
+            count++;
+        }
+
+    }
+    @* ------------------------------------------------------------------------------------------ *@
 </div>
