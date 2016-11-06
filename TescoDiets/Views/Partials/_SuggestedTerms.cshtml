@@ -1,0 +1,23 @@
+﻿@{
+    var cTProducts = Model;
+}
+
+@*tesco suggestions for misspelled items in the query*@
+<div class="row">
+
+    <div class="col-lg-12">
+    <p>Did you mean? : </p>
+        <ul>
+            @foreach (var item in cTProducts.SuggestedTerms)
+            {
+                if (item != null)
+                {
+                    <li><a href="/?query=@item.text">@item.text</a></li>
+                }
+            }
+
+        </ul>
+        </div>
+    <hr/>
+</div>
+

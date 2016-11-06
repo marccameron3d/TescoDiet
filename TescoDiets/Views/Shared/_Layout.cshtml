@@ -5,12 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@ViewBag.Title - My ASP.NET Application</title>
     @Styles.Render("~/Content/css")
+    <link href="~/Content/datatables.min.css" rel="stylesheet" />
     @Scripts.Render("~/bundles/modernizr")
 
 </head>
 <body>
     <div class="navbar navbar-inverse navbar-fixed-top">
-        <div class="container">           
+        <div class="container">
         </div>
     </div>
     <div class="container body-content">
@@ -24,6 +25,8 @@
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/bootstrap")
     <script src="~/Scripts/dev.js"></script>
+    <script src="~/Scripts/datatables.min.js"></script>
+
     @RenderSection("scripts", required: false)
 </body>
 </html>

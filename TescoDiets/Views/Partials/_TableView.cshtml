@@ -1,0 +1,46 @@
+﻿@using TescoCustomLibrary
+@{
+    CustomTescoProducts cTProducts = Model;
+}
+@if (cTProducts != null)
+{
+    <div class="row">
+        <table id="myTable" class="display">
+            <thead>
+                <tr>
+                    <th>Product</th>
+                    <th>Description</th>
+                    <th>LifeStyle(s)</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var product in cTProducts.TescoProducts)
+                {
+                    <tr>
+                        <td><a href="http://www.tesco.com/groceries/product/details/?id=@product.Tpnc">@product.Name</a></td>
+                        <td>
+                            @if (product.Description != null)
+                            {
+                                foreach (var description in product.Description)
+                                {
+                                    @description
+                                    <br/>
+                                }
+                            }
+                        </td>
+                        <td>
+                            @if (product.Lifestyles != null)
+                            {
+                                foreach (var lifestyle in product.Lifestyles)
+                                {
+                                    @lifestyle.lifestyle.value
+                                    <br/>
+                                }
+                            }
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}

@@ -1,0 +1,9 @@
+﻿@{
+    var query = Request.Params["query"];
+}
+<div class="col-lg-12">
+    @if (!string.IsNullOrEmpty(query))
+    {
+        <h2>Searching for items containing : "@query"</h2>
+    }
+</div>

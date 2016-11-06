@@ -3,17 +3,13 @@
 @{
     ViewBag.Title = "Home Page";
     var query = Request.Params["query"];
-
-    //Filters for food types
-    var foodFilter = Request.Params["foodFilter"] != null ? Request.Params["foodFilter"].ToString() : null;
-    @foodFilter
-    var amount = !string.IsNullOrEmpty(Request.Params["amount"]) ? Request.Params["amount"] : "10";
+    var gridOn = Request.Params["grid"];
 
     CustomTescoProducts cTProducts = null;
 
     if (!string.IsNullOrEmpty(query))
     {
-        cTProducts = new CustomTescoProducts(query, 0, amount);
+        cTProducts = new CustomTescoProducts(query, 0, "100");
     }
 }
 
@@ -39,17 +35,12 @@
                         <input name="query" /><br />
                     </div>
                     <div class="col-lg-4">
-                        <p>Amount to show (defaults 10) </p>
-                        <input name="amount" /><br />
+                        <p>Grid View</p>
+                        <input type="checkbox" name="gridOn">
+
+                        <br />
+                        <button class="btn">Search</button>
                     </div>
-                    <div class="col-lg-4">
-                        <input type="checkbox" class="foodFilter" name="foodFilter[]" value="All">All<br>
-                        <input type="checkbox" class="kosher" name="foodFilter[]" value="kosher">Kosher<br>
-                        <input type="checkbox" class="vegan" name="foodFilter[]" value="vegetarian">Vegetarian<br>
-                        <input type="checkbox" class="vegan" name="foodFilter[]" value="vegan">Vegan<br>
-                    </div>
-                    <br />
-                    <button class="btn">Search</button>
                 </form>
             </div>
         </div>
@@ -57,101 +48,26 @@
         @*Search Output*@
     </div>
     <hr />
-    <div class="col-lg-12">
-        @if (!string.IsNullOrEmpty(query))
-        {
-            <h2>Searching for items containing : "@query"</h2>
-        }
-    </div>
+
+    @Html.Partial("~/Views/Partials/_ContainingQuery.cshtml")
+
     @if (cTProducts != null)
     {
-        //tesco suggestions for misspelled items in the query
+
         if (cTProducts.SuggestedTerms != null && cTProducts.SuggestedTerms.Any())
         {
-            <p>Did you mean? : </p>
-            <ul>
-                @foreach (var item in cTProducts.SuggestedTerms)
-                {
-                    if (item != null)
-                    {
-                        <li><a href="/?query=@item.text">@item.text</a></li>
-                    }
-                }
-
-            </ul>
+            @Html.Partial("~/Views/Partials/_SuggestedTerms.cshtml", cTProducts)
         }
-        <hr />
 
-        //todo:get product lifestyle
-
-        //-------------------
-        //Variables to help build the output into a 3x3 grid
-        var count = 0;
-        var rowCount = 0;
-        //----------------
-        //searching through the collection and outputing items
-        foreach (var product in cTProducts.TescoProducts)
+        if (cTProducts.TescoProducts != null && gridOn == null)
         {
-            if (rowCount == 0)
-            {
-                @:<div class="row">
-            }
-            if (product != null)
-            {
-                <div class="col-lg-4">
-                    <a href="http://www.tesco.com/groceries/product/details/?id=@product.Tpnc">
-                        <img src="@product.Img" />
-                        <p>@product.Name</p>
-                    </a>
-                    @if (product.Description != null)
-                    {
-                        <p href="#" class="showHide btn btn-info">Description</p>
-                        <div>
-
-                            @foreach (var description in product.Description)
-                            {
-                                <ul class="list-group">
-                                    @if (!string.IsNullOrWhiteSpace(description))
-                                    {
-                                        <li class="list-group-item">@description</li>
-                                    }
-                                </ul>
-                            }
-
-                        </div>
-                    }
-                    @if (product.Lifestyles != null)
-                    {
-                        <p class="showHide btn btn-info">Lifestyle Info</p>
-                        <div>
-
-                            @foreach (var lifeStyle in product.Lifestyles)
-                            {
-                                <ul class="list-group">
-                                    @if (lifeStyle.lifestyle != null)
-                                    {
-                                    <li class="list-group-item">@lifeStyle.lifestyle.value</li>
-                                    }
-                                </ul>
-                            }
-
-                        </div>
-                    }
-                </div>
-            }
-
-            //---
-            //counter
-            rowCount++;
-            count++;
-            if (rowCount == 3)
-            {
-                @:</div>
-                rowCount = 0;
-            }
+            @Html.Partial("~/Views/Partials/_TableView.cshtml", cTProducts)
         }
-        //-----
+        else if (cTProducts.TescoProducts != null)
+        {
+            @Html.Partial("~/Views/Partials/_GridView.cshtml", cTProducts)
+        }
+
     }
 
-    @* ------------------------------------------------------------------------------------------ *@
 </div>

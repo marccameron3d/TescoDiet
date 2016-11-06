@@ -1,26 +1,29 @@
 ﻿$(document).ready(function() {
     
-    //set all as default checked on the form if nothing else is picked
-    if (getParameterByName("foodFilter") != null) {
-        if (getParameterByName("foodFilter").lastIndexOf("all") > -1) {
-            $('.foodFilter').prop('checked', true);
-        }
-        if (getParameterByName("foodFilter").lastIndexOf("vegan") > -1) {
-            $('.vegan').prop('checked', true);
-        }
-        if (getParameterByName("foodFilter").lastIndexOf("kosher") > -1) {
-            $('.kosher').prop('checked', true);
-        }
-        if (getParameterByName("foodFilter").lastIndexOf("vegetarian") > -1) {
-            $('.vegetarian').prop('checked', true);
-        }
-    }
+    ////set all as default checked on the form if nothing else is picked
+    //if (getParameterByName("foodFilter") != null) {
+    //    if (getParameterByName("foodFilter").lastIndexOf("all") > -1) {
+    //        $('.foodFilter').prop('checked', true);
+    //    }
+    //    if (getParameterByName("foodFilter").lastIndexOf("vegan") > -1) {
+    //        $('.vegan').prop('checked', true);
+    //    }
+    //    if (getParameterByName("foodFilter").lastIndexOf("kosher") > -1) {
+    //        $('.kosher').prop('checked', true);
+    //    }
+    //    if (getParameterByName("foodFilter").lastIndexOf("vegetarian") > -1) {
+    //        $('.vegetarian').prop('checked', true);
+    //    }
+    //}
 
     $('.showHide').click(function () {
         $(this).next().slideToggle();
     });
 
+
+    $('#myTable').DataTable();
 });
+
 
 
 function getParameterByName(name, url) {

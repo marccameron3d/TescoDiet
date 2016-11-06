@@ -1,0 +1,70 @@
+﻿@{
+    //-------------------
+    //Variables to help build the output into a 3x3 grid
+    var count = 0;
+    var rowCount = 0;
+    var cTProducts = Model;
+    //----------------
+}
+
+@foreach (var product in cTProducts.TescoProducts)
+{
+    if (rowCount == 0)
+    {
+        @:<div class="row">
+    }
+    
+    if (product != null)
+    {
+        <div class="col-lg-4">
+            <a href="http://www.tesco.com/groceries/product/details/?id=@product.Tpnc">
+                <img src="@product.Img" />
+                <p>@product.Name</p>
+            </a>
+            @if (product.Description != null)
+            {
+                <p href="#" class="showHide btn btn-info">Description</p>
+                <div>
+
+                    @foreach (var description in product.Description)
+                    {
+                        <ul class="list-group">
+                            @if (!string.IsNullOrWhiteSpace(description))
+                            {
+                                <li class="list-group-item">@description</li>
+                            }
+                        </ul>
+                    }
+
+                </div>
+            }
+            @if (product.Lifestyles != null)
+            {
+                <p class="showHide btn btn-info">Lifestyle Info</p>
+                <div>
+
+                    @foreach (var lifeStyle in product.Lifestyles)
+                    {
+                        <ul class="list-group">
+                            @if (lifeStyle.lifestyle != null)
+                            {
+                                <li class="list-group-item">@lifeStyle.lifestyle.value</li>
+                            }
+                        </ul>
+                    }
+
+                </div>
+            }
+        </div>
+    }
+
+    //---
+    //counter
+    rowCount++;
+    count++;
+    if (rowCount == 3)
+    {
+        @:</div>
+        rowCount = 0;
+    }
+}
