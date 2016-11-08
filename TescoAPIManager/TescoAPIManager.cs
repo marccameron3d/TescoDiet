@@ -12,7 +12,7 @@ namespace TescoAPIManager
     {
         const string APIKey = "b7ffe33968bf43e892ba62e3ff759e12";
 
-        public static TescoGroceryRoot MakeGroceryRequest(string query, int offset = 0, string limit = "10")
+        public static TescoGroceryRoot MakeGroceryRequest(string query, int offset = 0, string limit = "5")
         {
             HttpClient client = new HttpClient();
             var uri = String.Format("https://dev.tescolabs.com/grocery/products/?query={0}&offset={1}&limit={2}", query, offset, limit);

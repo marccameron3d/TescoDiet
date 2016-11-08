@@ -3,13 +3,13 @@
 @{
     ViewBag.Title = "Home Page";
     var query = Request.Params["query"];
-    var gridOn = Request.Params["grid"];
+    var offset = Request.Params["offset"] != null ? Int32.Parse(Request.Params["offset"]) : 0;
 
     CustomTescoProducts cTProducts = null;
 
     if (!string.IsNullOrEmpty(query))
     {
-        cTProducts = new CustomTescoProducts(query, 0, "100");
+        cTProducts = new CustomTescoProducts(query, offset);
     }
 }
 
@@ -23,7 +23,14 @@
     <div class="col-md-12">
         <h2>Enter an item to find</h2>
         <p>
-            This will search the tesco api for items they sell. Will give alternate search terms if the input is spelled incorrectly.
+            This will search the tesco api for items they sell. 
+            Features include:
+            <ul>
+                <li>Will give alternate search terms if the input is spelled incorrectly.</li>
+                <li>Will display top 5 items, if none are correct select next on the table.</li>
+                <li>Searchable for dietary needs.</li>
+                <li>Grid View for image's, non searchable.</li>
+            </ul>
         </p>
 
         @*Form*@
@@ -32,15 +39,10 @@
                 <form>
                     <div class="col-lg-4">
                         <p>Search Term: </p>
-                        <input name="query" /><br />
-                    </div>
-                    <div class="col-lg-4">
-                        <p>Grid View</p>
-                        <input type="checkbox" name="gridOn">
-
-                        <br />
+                        <input class="queryInput" name="query" />
                         <button class="btn">Search</button>
                     </div>
+                        
                 </form>
             </div>
         </div>
@@ -59,13 +61,9 @@
             @Html.Partial("~/Views/Partials/_SuggestedTerms.cshtml", cTProducts)
         }
 
-        if (cTProducts.TescoProducts != null && gridOn == null)
+        if (cTProducts.TescoProducts != null)
         {
             @Html.Partial("~/Views/Partials/_TableView.cshtml", cTProducts)
-        }
-        else if (cTProducts.TescoProducts != null)
-        {
-            @Html.Partial("~/Views/Partials/_GridView.cshtml", cTProducts)
         }
 
     }
