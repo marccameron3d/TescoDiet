@@ -1,48 +1,57 @@
-﻿$(document).ready(function () {
+﻿$(document)
+    .ready(function() {
 
-    $('#myTable').DataTable();
-    
-    ////set all as default checked on the form if nothing else is picked
-    //if (getParameterByName("foodFilter") != null) {
-    //    if (getParameterByName("foodFilter").lastIndexOf("all") > -1) {
-    //        $('.foodFilter').prop('checked', true);
-    //    }
-    //    if (getParameterByName("foodFilter").lastIndexOf("vegan") > -1) {
-    //        $('.vegan').prop('checked', true);
-    //    }
-    //    if (getParameterByName("foodFilter").lastIndexOf("kosher") > -1) {
-    //        $('.kosher').prop('checked', true);
-    //    }
-    //    if (getParameterByName("foodFilter").lastIndexOf("vegetarian") > -1) {
-    //        $('.vegetarian').prop('checked', true);
-    //    }
-    //}
+        $('#myTable').DataTable();
 
-    $('.showHide').click(function () {
-        $(this).next().slideToggle();
-    });
+        ////set all as default checked on the form if nothing else is picked
+        //if (getParameterByName("foodFilter") != null) {
+        //    if (getParameterByName("foodFilter").lastIndexOf("all") > -1) {
+        //        $('.foodFilter').prop('checked', true);
+        //    }
+        //    if (getParameterByName("foodFilter").lastIndexOf("vegan") > -1) {
+        //        $('.vegan').prop('checked', true);
+        //    }
+        //    if (getParameterByName("foodFilter").lastIndexOf("kosher") > -1) {
+        //        $('.kosher').prop('checked', true);
+        //    }
+        //    if (getParameterByName("foodFilter").lastIndexOf("vegetarian") > -1) {
+        //        $('.vegetarian').prop('checked', true);
+        //    }
+        //}
 
-    if (getParameterByName("query") != null) {
-        $('.queryInput').val(getParameterByName("query"));
-    }
-
-    $('#myTable_next').removeClass("disabled");
-
-    $('#myTable_next').click(function () {
-        var URL = window.location.href.split('?')[0];
-        var query = "";
-        var offset = 10;
+        $('.showHide')
+            .click(function() {
+                $(this).next().slideToggle();
+            });
 
         if (getParameterByName("query") != null) {
-            query = getParameterByName("query");
+            $('.queryInput').val(getParameterByName("query"));
         }
 
-        if (getParameterByName("offset") != null) {
-            offset = parseInt(getParameterByName("offset")) + 10; 
-        }
+        $('#myTable_next').removeClass("disabled");
 
-        window.location.href = URL + "?query=" + query + "&offset=" + offset;
-    });
+        $('#myTable_next')
+            .click(function() {
+                var URL = window.location.href.split('?')[0];
+                var query = "";
+                var offset = 10;
+
+                if (getParameterByName("query") != null) {
+                    query = getParameterByName("query");
+                }
+
+                if (getParameterByName("offset") != null) {
+                    offset = parseInt(getParameterByName("offset")) + 10;
+                }
+
+                window.location.href = URL + "?query=" + query + "&offset=" + offset;
+            });
+
+        var shoppingList = [];
+
+    //    $('.addToList').click(function() { 
+    //       shoppingList.push($(this).)
+    //});
 
 
 });

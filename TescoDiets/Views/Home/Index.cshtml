@@ -17,38 +17,50 @@
 
 <div class="jumbotron">
     <h1>Tesco Diets</h1>
+    <p>This project will hopefully be used to search tesco's groceries to give options to those who has specific dietary needs</p>
 </div>
 
 <div class="row">
-    <div class="col-md-12">
-        <h2>Enter an item to find</h2>
-        <p>
-            This will search the tesco api for items they sell. 
-            Features include:
-            <ul>
-                <li>Will give alternate search terms if the input is spelled incorrectly.</li>
-                <li>Will display top 5 items, if none are correct select next on the table.</li>
-                <li>Searchable for dietary needs.</li>
-                <li>Grid View for image's, non searchable.</li>
-            </ul>
-        </p>
-
-        @*Form*@
-        <div class="row">
-            <div class="col-md-12">
-                <form>
-                    <div class="col-lg-4">
-                        <p>Search Term: </p>
-                        <input class="queryInput" name="query" />
-                        <button class="btn">Search</button>
-                    </div>
-                        
-                </form>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="col-lg-4">
+                <h2>Enter an item to find</h2>
+                <p>
+                    This will search the tesco api for items they sell.
+                    Features include:
+                    <ul>
+                        <li>Will give alternate search terms if the input is spelled incorrectly.</li>
+                        <li>Will display top 10 items</li>
+                        <li>Search through further results with the next button</li>
+                        <li>Searchable for dietary needs.</li>
+                    </ul>
+                </p>
+            </div>
+            <div class="col-lg-8">
+                <pre>Shopping list:</pre>
             </div>
         </div>
-        @* --------------------------------------------------------------------------- *@
-        @*Search Output*@
     </div>
+    <div class="row">
+        <div class="col-lg-12">
+            @*Form*@
+            <div class="row">
+                <div class="col-md-12">
+                    <form>
+                        <div class="col-lg-4">
+                            <p>Search Term: </p>
+                            <input class="queryInput" name="query" />
+                            <button class="btn">Search</button>
+                        </div>
+
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+            @* --------------------------------------------------------------------------- *@
+            @*Search Output*@
+       
     <hr />
 
     @Html.Partial("~/Views/Partials/_ContainingQuery.cshtml")

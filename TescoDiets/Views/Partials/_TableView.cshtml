@@ -11,20 +11,24 @@
                     <th>Product</th>
                     <th>Description</th>
                     <th>LifeStyle(s)</th>
+                    <th>Price (£)</th>
+                    <th>Add to list</th>
                 </tr>
             </thead>
             <tbody>
                 @foreach (var product in cTProducts.TescoProducts)
                 {
                     <tr>
-                        <td><a href="http://www.tesco.com/groceries/product/details/?id=@product.Tpnc">@product.Name</a></td>
+                        <td>
+                            <a href="http://www.tesco.com/groceries/product/details/?id=@product.Tpnc">@product.Name</a>
+                        </td>
                         <td>
                             @if (product.Description != null)
                             {
                                 foreach (var description in product.Description)
                                 {
                                     @description
-                                    <br/>
+                                    <br />
                                 }
                             }
                         </td>
@@ -34,9 +38,19 @@
                                 foreach (var lifestyle in product.Lifestyles)
                                 {
                                     @lifestyle.lifestyle.value
-                                    <br/>
+                                    <br />
                                 }
                             }
+                        </td>
+                        <td>
+                            @if (product.Price != null)
+                            {
+                                @:£
+                                @product.Price
+                            }
+                        </td>
+                        <td>
+                            <button class="addToList"> + </button>
                         </td>
                     </tr>
                 }

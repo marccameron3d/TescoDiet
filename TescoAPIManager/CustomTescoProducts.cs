@@ -39,16 +39,25 @@ namespace TescoCustomLibrary
 
             if (GroceryJson != null)
             {
+                var count = 0;
                 foreach (var productsResult in GroceryJson.uk.ghs.products.results)
                 {
+
+                    var price = !string.IsNullOrWhiteSpace(GroceryJson.uk.ghs.products.results[count].price.ToString("0.00"))
+                        ? GroceryJson.uk.ghs.products.results[count].price.ToString("0.00")
+                        : "Price Unavailable";
+
                     TescoProduct tescoProduct = new TescoProduct(productsResult.name,
                                                                  productsResult.image,
                                                                  productsResult.description,
                                                                  GetProductLifeStyles(productsResult.tpnb.ToString(),ProductSearch.Tpnb),
                                                                  productsResult.tpnb,
                                                                  GetGTIN(productsResult.image),
-                                                                 GetTPNC(productsResult.tpnb.ToString()));
+                                                                 GetTPNC(productsResult.tpnb.ToString()),
+                                                                 price);
                     TescoProducts.Add(tescoProduct);
+                    count++;
+
                 }
             }
         }
@@ -177,8 +186,9 @@ namespace TescoCustomLibrary
         public int Tpnb { get; set; }
         public string Gtin { get; set; }
         public List<string> Description { get; set; }
+        public string Price { get; set; }
 
-        public TescoProduct(string name, string image, List<string> description = null, List<Lifestyle> lifestyles = null, int tpnb = 0, string gtin = "", string tpnc = "")
+        public TescoProduct(string name, string image, List<string> description = null, List<Lifestyle> lifestyles = null, int tpnb = 0, string gtin = "", string tpnc = "", string price = "")
         {
             Name = name;
             Img = image;
@@ -187,6 +197,7 @@ namespace TescoCustomLibrary
             Tpnc = tpnc;
             Tpnb = tpnb;
             Gtin = gtin;
+            Price = price;
         }
     }
 
